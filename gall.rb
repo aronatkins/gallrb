@@ -220,17 +220,21 @@ class Gallery < GalleryPath
       Image.new(self,child)
     end
 
-    @images.each_with_index do |image,i|
-      # Gah. arr[-1] gives the last, not nil. arr[BIG] gives nil.
-      image.previous = @images[i-1] unless i==0
-      image.next     = @images[i+1]
-    end
-
     @movies = files.find_all do |child|
       Movie.known_type?(child)
     end.map do |child|
       Log.debug "Movie! #{child}"
       Movie.new(self,child)
+    end
+
+    @galleries = @galleries.sort_by { |g| g.path.to_s.downcase }
+    @images    = @images.sort_by { |i| i.path.to_s.downcase }
+    @movies    = @movies.sort_by { |m| m.path.to_s.downcase }
+
+    @images.each_with_index do |image,i|
+      # Gah. arr[-1] gives the last, not nil. arr[BIG] gives nil.
+      image.previous = @images[i-1] unless i==0
+      image.next     = @images[i+1]
     end
 
     @movies.each_with_index do |movie,i|
@@ -246,10 +250,6 @@ class Gallery < GalleryPath
         end
       end
     end
-
-    @galleries = @galleries.sort_by { |g| g.path.to_s.downcase }
-    @images    = @images.sort_by { |i| i.path.to_s.downcase }
-    @movies    = @movies.sort_by { |m| m.path.to_s.downcase }
   end
 
   def children?()
@@ -489,10 +489,11 @@ class GallRB
 
   attr_accessor :gallery
 
-  def initialize(_base_path, _base_url)
+  def initialize(_base_path, _base_url, _force)
     @base_path = _base_path
     @base_url  = _base_url
-    @rowsize = 5
+    @force     = _force
+    @rowsize   = 5
 
     @templates = {}
     @urls      = {}
@@ -566,7 +567,7 @@ class GallRB
       # BUG: Re-generate only when necessary (if settings change?)
       derivation = o.send(name)
       if derivation.image?
-        unless derivation.path.exist?
+        unless derivation.path.exist? or @force
           FileUtils.mkdir_p(derivation.path.dirname)
           derivation.resize
         end
@@ -819,6 +820,7 @@ opts = GetoptLong.new(
   [ '--debug', '-d', GetoptLong::NO_ARGUMENT ],
   [ '--profile', '-p', GetoptLong::NO_ARGUMENT ],
   [ '--rubyprof', '-r', GetoptLong::NO_ARGUMENT ],
+  [ '--force', '-f', GetoptLong::NO_ARGUMENT ],
   [ '--url', '-u', GetoptLong::REQUIRED_ARGUMENT ]
   )
 
@@ -827,6 +829,8 @@ opts = GetoptLong.new(
 base_url = "/photos"
 # How do we kickoff album generation?
 wrapper  = :do_yield
+# Should we regenerate all thumb/medium images?
+force = false
 
 opts.each do |opt, arg|
   case opt
@@ -840,6 +844,9 @@ opts.each do |opt, arg|
   when '--rubyprof'
     Log.info("Using ruby-prof.")
     wrapper = :do_rubyprof
+  when '--force'
+    Log.info("Force image regeneration.")
+    force = true
   when '--url'
     base_url = arg
   end
@@ -851,7 +858,7 @@ dirs.each do |scan_dir|
   url = cleanpath(File.join(base_url,scan_dir))
 
   Log.info "Base URL: #{url.to_s}"
-  send(wrapper) { GallRB.new(scan_dir,url).build }
+  send(wrapper) { GallRB.new(scan_dir,url, force).build }
   Log.info("Done")
 end
 
@@ -869,3 +876,4 @@ end
 #   ** Latest is down to about 11M, 42s
 # Write my own pathname?
 # Tried using yaml for config file; required >5M!
+# better use of multiple cpus? parallel index generation? what about images?
