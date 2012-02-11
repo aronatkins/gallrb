@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Image: <%= image.title -%></title>
+  <%= stylesheet 'style.css' %>
+</head>
+<body>
+<%= breadcrumb image, false %>
+<table>
+<tr>
+<td class="prev"><%= link_to_previous image %></td>
+<td class="title"><%= link_to(image.title,image.path) %></td>
+<td class="next"><%= link_to_next image %></td>
+</tr>
+</table>
+
+<div class="image"><%= link_to(image_tag(image.medium.path),image.path) -%></div>
+</body>
+</html>

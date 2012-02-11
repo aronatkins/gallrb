@@ -1,0 +1,8 @@
+<%= maybe_start_table(image_counter) -%>
+<%= maybe_start_row(image_counter,rowsize) -%>
+<td>
+  <%= image_link_to(image.thumbnail.path,image.medium.html) -%>
+  <div class="title"><%= link_to(image.title,image.medium.html) -%></div>
+</td>
+<%= maybe_end_row(image_counter,rowsize,listsize) -%>
+<%= maybe_end_table(image_counter,listsize) -%>

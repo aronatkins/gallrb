@@ -1,0 +1,8 @@
+<%= maybe_start_table(movie_counter) -%>
+<%= maybe_start_row(movie_counter,rowsize) -%>
+<td>
+  <%= image_link_to(movie.thumbnail.path,movie.path) -%>
+  <div class="title"><%= link_to(movie.title,movie.path) -%></div>
+</td>
+<%= maybe_end_row(movie_counter,rowsize,listsize) -%>
+<%= maybe_end_table(movie_counter,listsize) -%>

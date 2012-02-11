@@ -1,0 +1,21 @@
+<html>
+<head>
+  <title>Album: <%= gallery.title -%></title>
+  <%= stylesheet 'style.css' %>
+</head>
+<body>
+<h1>Album: <%= breadcrumb gallery %></h1>
+<% unless gallery.galleries.empty? -%>
+  <h2>Albums</h2>
+  <%= render :partial => 'gallery', :collection => gallery.galleries %>
+<% end -%>
+<% unless gallery.images.empty? -%>
+  <h2>Images</h2>
+  <%= render :partial => 'image', :collection => gallery.images %>
+<% end -%>
+<% unless gallery.movies.empty? -%>
+  <h2>Movies</h2>
+  <%= render :partial => 'movie', :collection => gallery.movies %>
+<% end -%>
+</body>
+</html>

@@ -1,0 +1,77 @@
+body {
+  background-color: #666666;
+  color: #ffffff;
+  margin: 20px;
+  padding: 0px;
+}
+
+body, p, ol, ul, dl, td {
+  font-family: Bitstream Vera Sans, verdana, arial, helvetica, sans-serif;
+  font-size:   14px;
+  line-height: 1.25em;
+}
+
+h1 {
+  font-size: 18px;
+}
+h2 {
+  font-size: 14px;
+}
+
+table {
+  width: 100%;
+}
+
+img {
+  padding: 5px;
+  background-color: #ffffff;
+  border: 0;
+}
+
+div.image {
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
+
+td.title {
+  width: 50%;
+}
+td.prev {
+  width: 25%;
+  text-align: left;
+}
+td.next {
+  width: 25%;
+  text-align: right;
+}
+
+div.details {
+  font-size: 10px;
+  color: #cccccc;
+}
+
+div.title {
+  font-size: 14px;
+}
+
+div.title.date a {
+  font-size: 10px;
+  color: #cccccc;
+}
+
+a {
+   text-decoration: none;
+   border-bottom: 1px dotted #ffffff;
+}
+a:link {
+  color: #ffffff;
+}
+a:visited {
+  color: #ffffff;
+}
+a.image {
+  border: none;
+}

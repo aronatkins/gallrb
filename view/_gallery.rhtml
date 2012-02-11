@@ -1,0 +1,9 @@
+<%= maybe_start_table(gallery_counter) -%>
+<%= maybe_start_row(gallery_counter,rowsize) -%>
+<td>
+  <div><%= image_link_to(gallery.thumbnail,gallery.index) -%></div>
+  <%= title gallery -%>
+  <%= details gallery -%>
+</td>
+<%= maybe_end_row(gallery_counter,rowsize,listsize) -%>
+<%= maybe_end_table(gallery_counter,listsize) -%>
